@@ -13,6 +13,6 @@ int main(){
     }
 
     for(auto p = a.end()-1;p!=a.begin()-1;p-- ){
-        cout << *p << ' ';
+        cout << *p << ' ';//rend,rebegin
     }
 }

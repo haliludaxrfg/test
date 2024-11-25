@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include<stdio.h>//二项式系数
 int f(int m,int n){
 	if(m<n&&m>0&&n>0){
 		return 0;
