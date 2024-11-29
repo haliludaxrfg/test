@@ -1,28 +1,6 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-/*
-int main(){
-    vector <int> nums;
-    int _;
-    while (1)
-    {
-        cin >> _;
-        if(_==0)
-            break;
-        else
-            nums.push_back(_);
-    }
-
-    if(nums.empty())
-        printf("NULL");
-    else{
-        for(auto &a:nums){
-            cout << a <<" ";
-        }
-    }
-
-}*/
-// 用vector秒了，真的是招笑了
+// 本题目标是去重
 struct ListNode
 {
     int val;
@@ -72,6 +50,15 @@ void InsertTail(ListNode *&L, int v)
         cur->next = newNode;
     }
 }
+
+// 无重复尾插
+set<int> exists; // 全局变量？
+void InsertTail_norepeated(ListNode *&L, int v) {
+    if (exists.find(v) == exists.end()) {
+        InsertTail(L, v);
+        exists.insert(v);
+    }
+}
 // 头插
 void InsertHead(ListNode *&L, int v)
 {
@@ -80,6 +67,7 @@ void InsertHead(ListNode *&L, int v)
     newNode->next = L;
     L = newNode;
 }
+
 // 删掉特定值
 ListNode *removeNode(ListNode *L, int v)
 {
@@ -130,14 +118,17 @@ ListNode *addNode(ListNode *L, int v, int num)
 }
 int main()
 {
-   ListNode* L = new ListNode;//头指针为L
-   L = nullptr;
-   while(1){
-    int _;cin>>_;
-    if(_==0){
-        break;
+    ListNode *L = nullptr;
+    
+    while (1)
+    {
+        int _;
+        cin >> _;
+        if (_ == 0)
+        {
+            break;
         }
-    InsertTail(L,_);
-   }
-   printList(L);
+        InsertTail_norepeated(L, _);
+    }
+    printList(L);
 }
