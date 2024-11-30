@@ -29,16 +29,16 @@ struct ListNode
     ListNode *next;
 };
 // 打印
-void printList(ListNode *L)
+void coutlist(ListNode *head)
 {
-    if (L == NULL)
+    if (head == NULL)
     {
         cout << "NULL";
     }
     else
     {
 
-        ListNode *cur = L;
+        ListNode *cur = head;
         while (cur != NULL)
         {
             cout << cur->val << " ";
@@ -49,19 +49,19 @@ void printList(ListNode *L)
 }
 // 尾插
 
-void InsertTail(ListNode *&L, int v)
+void InsertTail(ListNode *&head, int v)
 {
-    if (L == NULL)
+    if (head == NULL)
     {
         ListNode *node = new ListNode;
-        L = node;
-        L->val = v;
-        L->next = NULL;
+        head = node;
+        head->val = v;
+        head->next = NULL;
         return;
     }
     else
     {
-        ListNode *cur = L;
+        ListNode *cur = head;
         while (cur->next != NULL)
         {
             cur = cur->next;
@@ -73,21 +73,21 @@ void InsertTail(ListNode *&L, int v)
     }
 }
 // 头插
-void InsertHead(ListNode *&L, int v)
+void InsertHead(ListNode *&head, int v)
 {
     ListNode *newNode = new ListNode;
     newNode->val = v;
-    newNode->next = L;
-    L = newNode;
+    newNode->next = head;
+    head = newNode;
 }
 // 删掉特定值
-ListNode *removeNode(ListNode *L, int v)
+ListNode *removeNode(ListNode *head, int v)
 {
     // dummyhead
     ListNode *dummyHead = new ListNode;
-    dummyHead->next = L; // The true head is L.
+    dummyHead->next = head; // The true head is head.
 
-    ListNode *cur = L;
+    ListNode *cur = head;
     while (cur->next != NULL)
     {
         if (cur->next->val == v) // previous one
@@ -104,11 +104,11 @@ ListNode *removeNode(ListNode *L, int v)
     return dummyHead->next;
 }
 // 向某个值的结点前插入一个值
-ListNode *addNode(ListNode *L, int v, int num)
+ListNode *addNode(ListNode *head, int v, int num)
 {
     // dummyhead
     ListNode *dummyHead = new ListNode;
-    dummyHead->next = L; // The true head is L.
+    dummyHead->next = head; // The true head is head.
 
     ListNode *cur = dummyHead;
     while (cur != NULL)
@@ -130,14 +130,14 @@ ListNode *addNode(ListNode *L, int v, int num)
 }
 int main()
 {
-   ListNode* L = new ListNode;//头指针为L
-   L = nullptr;
+   ListNode* head = new ListNode;//头指针为head
+   head = nullptr;
    while(1){
     int _;cin>>_;
     if(_==0){
         break;
         }
-    InsertTail(L,_);
+    InsertTail(head,_);
    }
-   printList(L);
+   coutlist(head);
 }
