@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 /*6
 题目编号 ：Exp04-Basic06，GJBook3-06-04
 题目名称：循环右移

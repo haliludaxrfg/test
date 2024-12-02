@@ -40,7 +40,7 @@ void generateSpiralMatrix(int n) {
 int main() {
     int n;
     printf("请输入矩阵的大小: ");
-    scanf("%d", &n);  // 读取用户输入
+    scanf_s("%d", &n);  // 读取用户输入
     generateSpiralMatrix(n);  // 调用函数生成并打印螺旋矩阵
     return 0;
 }

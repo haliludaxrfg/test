@@ -1,3 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
 #include <stdio.h>
 
 int Cbnt(int m,int n){
@@ -9,6 +17,6 @@ int Cbnt(int m,int n){
 }    
 int main(){
     int n,m;
-    scanf("%d %d",&m,&n);
+    scanf_s("%d %d",&m,&n);
     printf("%d",Cbnt(m,n));
 }

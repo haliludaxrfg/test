@@ -4,6 +4,14 @@
 输入：每个测试输入包含 1 个测试用例，给出正整数 n（0<= n <1000）
 输出：输出占一行：如果 0<= n <1000, 用规定的格式输出 n，所有英文单词小写，最后一个单词后无字符；否则输出ERR。
 */
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
 #include <stdio.h>
 
 char NUMBER[100][12] = {"zero","one","two","three","four","five","six","seven","eight","nine","ten"
@@ -18,7 +26,7 @@ char NUMBER[100][12] = {"zero","one","two","three","four","five","six","seven","
                         "ninety"};
 
 int main(){
-    int n;scanf("%d",&n);
+    int n;scanf_s("%d",&n);
     
     int h,m,b,a;
     h = n / 100;//百位

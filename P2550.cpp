@@ -1,4 +1,6 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <set>
+#include <vector>
 using namespace std;
 
 int Ac[7]= {0};//最终计算出多少奖

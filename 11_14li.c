@@ -1,3 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
 #include<stdio.h>//二项式系数
 int f(int m,int n){
 	if(m<n&&m>0&&n>0){
@@ -25,8 +33,8 @@ int f(int m,int n){
 }
 int main(){
 	int m,n,result;
-	scanf("%d",&m);
-	scanf("%d",&n);
+	scanf_s("%d",&m);
+	scanf_s("%d",&n);
 	result=f(m,n);
 	return 0;
 }

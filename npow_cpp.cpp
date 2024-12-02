@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 int main(){
@@ -8,7 +9,7 @@ int main(){
     vector<int> ans;
     int ch;
     int i = 0;
-    while (scanf("%d", &ch) == 1 && ch != -1){
+    while (scanf_s("%d", &ch) == 1 && ch != -1){
         if(ch != 0){
             if(nums.size() <= i){
                 nums.push_back(vector<int>()); // 为新行分配空间

@@ -1,10 +1,18 @@
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
 #include <stdio.h>
  
 int main()
  
 {
     int a[10000],n,k,s,m,i,j,num,flag=0;
-    scanf("%d %d %d",&n,&s,&m);
+    scanf_s("%d %d %d",&n,&s,&m);
     for(i=0;i<n;i++)
  
         a[i]=i+1;//构建个数为n的自然数数组

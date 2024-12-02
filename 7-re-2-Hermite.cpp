@@ -14,6 +14,6 @@ int main(){
     
     int n;
     double x;
-    scanf("%d %lf",&n,&x);
+    scanf_s("%d %lf",&n,&x);
     printf("%.2lf",Hn(n,x));
 }

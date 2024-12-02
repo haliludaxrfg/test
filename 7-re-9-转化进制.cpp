@@ -1,4 +1,8 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <string>
+#include <algorithm>
 using namespace std;
 
 const string DECIMAL_TO_CHAR = "0123456789";

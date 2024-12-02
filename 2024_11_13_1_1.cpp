@@ -1,4 +1,15 @@
-#include <bits/stdc++.h>
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include<numeric>
 using namespace std;
 
 set<int> prime;

@@ -1,3 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
 /*8
 题目编号: Exp04-Basic08,GJBook3-06-03
 题目名称: 矩阵转置

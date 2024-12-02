@@ -1,4 +1,13 @@
+#define _CRT_SECURE_NO_WARNINGS 
 #include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>
+#include <stdio.h>
+
 int main()
 {
     int x;

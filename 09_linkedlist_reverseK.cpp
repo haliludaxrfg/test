@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include <numeric>
 using namespace std;
 // 本题目标是去重
 struct ListNode
@@ -8,6 +9,49 @@ struct ListNode
     ListNode *next;
 };
 // 打印
+int Lenth(ListNode* headnode){
+    ListNode *dummyHead = new ListNode;
+    dummyHead->next = headnode; // The true head is headnode.
+
+    ListNode *cur = dummyHead;
+    int cnt = -1;
+    while (cur!=NULL)
+    {
+        cnt++;
+        cur = cur->next;
+    }
+    return cnt;
+    
+}
+
+int valofnode(ListNode *headnode,int pos){
+    ListNode *dummyHead = new ListNode;
+    dummyHead->next = headnode; // The true head is headnode.
+
+    ListNode *cur = dummyHead;
+    int cnt = -1;
+    int value = 0;
+    while (cur->next != NULL)
+    {
+        cnt++;
+        cur = cur->next;
+        if(pos == cnt){
+            value = cur ->val;
+            break;
+        }
+    }
+    return value;
+}
+
+void checkval(int _){
+    if (_!=0)
+    {
+        cout <<_;
+    }else{
+        cout <<"NULL";
+    }    
+}
+
 void coutlist(ListNode *headnode)
 {
     if (headnode == NULL)
@@ -27,6 +71,7 @@ void coutlist(ListNode *headnode)
     }
 }
 // 尾插
+
 
 void InsertTail(ListNode *&headnode, int v)
 {
@@ -117,6 +162,8 @@ ListNode *addNode(ListNode *headnode, int v, int num)
 
     return dummyHead->next;
 }
+
+
 int main()
 {
     ListNode *headnode = nullptr;
@@ -129,7 +176,10 @@ int main()
         {
             break;
         }
-        InsertTail_norepeated(headnode, _);
+        InsertTail(headnode, _);
     }
-    coutlist(headnode);
+    int K;cin >>K;
+    //cout <<"Lenth:"<<Lenth(headnode)<<endl;
+    checkval(valofnode(headnode,Lenth(headnode)-K));
+    //coutlist(headnode);
 }

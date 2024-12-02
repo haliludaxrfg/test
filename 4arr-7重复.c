@@ -1,4 +1,11 @@
-/*7
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <numeric>
+#include <string>/*7
 题目编号：Exp04-Basic07，GJBook3-06-01
 题目名称：检验矩阵重复元素
 题目描述：编写程序判断任意给定n*n的两维整型数组中是否有相同元素。
