@@ -8,7 +8,7 @@ struct ListNode
     int val;
     ListNode *next;
 };
-// 打印
+
 int Lenth(ListNode* headnode){
     ListNode *dummyHead = new ListNode;
     dummyHead->next = headnode; // The true head is headnode.

@@ -76,7 +76,7 @@ ListNode *removeNode(ListNode *headnode, int v)
     ListNode *dummyHead = new ListNode;
     dummyHead->next = headnode; // The true head is headnode.
 
-    ListNode *cur = headnode;
+    ListNode *cur = dummyHead;
     while (cur->next != NULL)
     {
         if (cur->next->val == v) // previous one
