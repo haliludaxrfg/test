@@ -17,7 +17,7 @@ int main(){
         wb:创建/清空文件内容
         ab:创建/文件指针偏移到末尾
      */
-    FILE* fp = fopen("otto.c","ab");
+    FILE* fp = fopen("otto.c","a+");
     if(fp == NULL){
         std::cout<<"file open failed"<<std::endl;
         exit(-1);
@@ -30,7 +30,7 @@ int main(){
     //开始位置，写入大小（默认一），写入次数，文件句柄 fwrite fread同理
     size_t ret = fread(buffer,1,6,fp);
     std::cout<<buffer<<" "<<ret<<std::endl;
-    fseek(fp,0,SEEK_CUR);
+    fseek(fp,0,SEEK_SET);
     std::cout<<buffer<<std::endl;
     fclose(fp);
     return 0;
