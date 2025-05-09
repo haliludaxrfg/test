@@ -14,7 +14,7 @@ o = m(2,8);                          //截取从2位到第8位的子字符串
 （5）你的收获。*/
 #include <cstring>
 #include <iostream>
-
+using namespace std;
 class MyString {
 private:
     char* m_data;
@@ -85,6 +85,30 @@ public:
         }
         return *this;
     }
+    // 支持下标运算符
+    // 允许使用下标访问字符
+    char& operator[](size_t index) { return m_data[index]; }  
+    const char& operator[](size_t index) const { return m_data[index]; }  
+    //字符串截取
+    MyString operator()(int start, int end) const {
+        // 处理参数范围
+        int start_idx = std::max(0, start);
+        int end_idx = std::min(end, static_cast<int>(m_length) - 1);
+        
+        start_idx = std::min(start_idx, static_cast<int>(m_length) - 1);
+        end_idx = std::max(end_idx, 0);
+
+        if (start_idx > end_idx) {
+            std::swap(start_idx, end_idx);
+        }
+
+        size_t sub_len = end_idx - start_idx + 1;
+
+        MyString result;
+        result.deepCopy(m_data + start_idx, sub_len);
+
+        return result;
+    }
 
     // 移动赋值
     MyString& operator=(MyString&& other) noexcept {
@@ -118,9 +142,21 @@ public:
         return MyString(lhs) + rhs;
     }
 
-    MyString& operator+=(const MyString& rhs) { /* 原有实现 */ }
+    MyString& operator+=(const MyString& rhs) { 
+        size_t new_length = m_length + rhs.m_length;
+        char* new_data = new char[new_length + 1];
+        std::strcpy(new_data, m_data);
+        std::strcat(new_data, rhs.m_data);
+        delete[] m_data;
+        m_data = new_data;
+        m_length = new_length;
+        return *this;
+     }
 
-    bool operator==(const MyString& rhs) const { /* 原有实现 */ }
+    bool operator==(const MyString& rhs) const { 
+        if (m_length != rhs.m_length) return false;
+        return std::strcmp(m_data, rhs.m_data) == 0;
+     }
 
     size_t length() const { return m_length; }
     const char* c_str() const { return m_data; }
@@ -132,16 +168,17 @@ public:
 
 // 使用示例
 int main() {
-    MyString s1;
-    MyString s2 = "Hello";      // 隐式调用构造函数
-    MyString s3 = s2;
-    MyString s4 = std::move(s3);
-
-    s1 = "World";               // 调用 operator=(const char*)
-    MyString s5 = s2 + " " + s1;
-
-    std::cout << s5 << std::endl;       // 输出：Hello World
-    std::cout << "Length: " << s5.length() << std::endl; // 输出：11
-
+    MyString m("software");
+    MyString n(m),o;
+    o = m;
+    cout << o << endl;     
+    cout << n[4] << endl;             // 输出第4位字符
+    cout << n.length() << endl;        // 输出字符串的长度
+    o = m + n;                              // 合并字符串
+    cout << o << endl;     
+    o = m(2, 8);                   // 截取从2位到第8位的子字符串
+    cout << o << endl;                    // 输出合并后的字符串
+    cout << o.length() << endl;        // 输出合并后的字符串长度
+    cout << o.c_str() << endl;        // 输出合并后的字符串内容
     return 0;
 }
