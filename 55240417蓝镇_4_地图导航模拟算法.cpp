@@ -10,144 +10,166 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const float INF = numeric_limits<float>::infinity(); // 定义无穷大，用于初始化距离
+const float INF = numeric_limits<float>::infinity();
 
 class Dijkstra {
-private:
-    map<string, map<string, float>> graph; // 图的邻接表表示，存储每个节点及其相邻节点的权重
-    vector<string> nodes; // 存储图中所有节点的列表
-
 public:
-    vector<map<string, float>> steps; // 存储每一步的距离更新情况
-    map<string, float> finalDistances; // 存储从起点到每个节点的最终最短距离
-    map<string, string> predecessors; // 存储每个节点的前驱节点，用于路径回溯
+    vector<vector<pair<int, float>>> adjList; // 邻接表：索引 -> [(邻居索引, 权重)]
+    vector<string> nodeNames;                // 索引到节点名称的映射
+    map<string, int> nodeIndex;              // 节点名称到索引的映射
 
-    // 构造函数，初始化图并提取节点列表
-    Dijkstra(map<string, map<string, float>> g) : graph(g) {
-        for (auto& pair : g) {
-            nodes.push_back(pair.first); // 提取所有节点
+    vector<map<string, float>> steps;       // 记录每一步的距离状态
+    map<string, float> finalDistances;      // 最终最短距离
+    map<string, string> predecessors;       // 前驱节点用于路径回溯
+
+    // 构造函数：将输入的map转换为vector邻接表
+    Dijkstra(const map<string, map<string, float>>& graph) {
+        // 收集所有节点并按名称排序
+        for (const auto& pair : graph) {
+            nodeNames.push_back(pair.first);
         }
-        sort(nodes.begin(), nodes.end()); // 对节点进行排序，便于输出
+        sort(nodeNames.begin(), nodeNames.end());
+        
+        // 构建名称到索引的映射
+        for (size_t i = 0; i < nodeNames.size(); ++i) {
+            nodeIndex[nodeNames[i]] = i;
+        }
+        
+        // 初始化邻接表
+        adjList.resize(nodeNames.size());
+        for (const auto& pair : graph) {
+            int u = nodeIndex[pair.first];
+            for (const auto& neighbor : pair.second) {
+                int v = nodeIndex[neighbor.first];
+                float weight = neighbor.second;
+                adjList[u].emplace_back(v, weight); // 添加边（无向图需双向）
+            }
+        }
     }
 
-    // Dijkstra算法实现，计算从起点到所有节点的最短路径
+    // Dijkstra算法实现
     void findShortestPath(string start) {
-        map<string, float> distances; // 存储当前的最短距离
-        map<string, bool> visited; // 标记节点是否已访问
-        steps.clear(); // 清空步骤记录
-        finalDistances.clear(); // 清空最终距离
-        predecessors.clear(); // 清空前驱节点
+        if (nodeIndex.find(start) == nodeIndex.end()) return; // 节点不存在
+        
+        int startIdx = nodeIndex[start];
+        int n = nodeNames.size();
+        vector<float> distances(n, INF);    // 距离数组
+        vector<bool> visited(n, false);      // 访问标记
+        vector<int> pred(n, -1);             // 前驱索引
+        
+        distances[startIdx] = 0;
+        steps.clear();
+        finalDistances.clear();
+        predecessors.clear();
 
-        // 初始化距离和访问状态
-        for (auto& node : nodes) {
-            distances[node] = INF; // 初始距离为无穷大
-            visited[node] = false; // 初始状态为未访问
-        }
-        distances[start] = 0; // 起点到自身的距离为0
-
-        for (size_t i = 0; i < nodes.size(); ++i) { // 遍历所有节点
-            string current;
+        for (int i = 0; i < n; ++i) {
+            // 选择当前未访问的最小距离节点
+            int current = -1;
             float minDist = INF;
-
-            // 找到当前未访问的最小距离节点
-            for (auto& node : nodes) {
-                if (!visited[node] && distances[node] < minDist) {
-                    minDist = distances[node];
-                    current = node;
+            for (int j = 0; j < n; ++j) {
+                if (!visited[j] && distances[j] < minDist) {
+                    minDist = distances[j];
+                    current = j;
                 }
             }
-
-            if (minDist == INF) break; // 如果所有节点都不可达，退出循环
-            visited[current] = true; // 标记当前节点为已访问
-
-            // 更新相邻节点的距离
-            for (auto& neighbor : graph[current]) {
-                if (!visited[neighbor.first]) {
-                    float newDist = distances[current] + neighbor.second; // 计算新距离
-                    if (newDist < distances[neighbor.first]) { // 如果新距离更短，更新
-                        distances[neighbor.first] = newDist;
-                        predecessors[neighbor.first] = current; // 更新前驱节点
-                    }
+            if (current == -1) break;        // 剩余节点不可达
+            visited[current] = true;
+            
+            // 更新邻居节点的距离
+            for (const auto& neighbor : adjList[current]) {
+                int v = neighbor.first;
+                float weight = neighbor.second;
+                if (!visited[v] && distances[current] + weight < distances[v]) {
+                    distances[v] = distances[current] + weight;
+                    pred[v] = current;
                 }
             }
-
-            steps.push_back(distances); // 记录当前步骤的距离
+            
+            // 记录当前步骤（转换为节点名称的map）
+            map<string, float> step;
+            for (int j = 0; j < n; ++j) {
+                step[nodeNames[j]] = distances[j];
+            }
+            steps.push_back(step);
         }
 
-        finalDistances = distances; // 保存最终的最短距离
+        // 转换为最终结果
+        for (int i = 0; i < n; ++i) {
+            finalDistances[nodeNames[i]] = distances[i];
+            if (pred[i] != -1) {
+                predecessors[nodeNames[i]] = nodeNames[pred[i]];
+            }
+        }
     }
 
-    // 打印Dijkstra算法的每一步
+    // 打印算法步骤
     void printSteps() {
-        cout << "Dijkstra Algorithm Steps:" << endl;
-        cout << left << setw(8) << "Step"; // 输出表头
-        for (auto& node : nodes) {
-            cout << setw(8) << node; // 输出节点名称
+        cout << "Dijkstra Steps:" << endl;
+        cout << left << setw(8) << "Step";
+        for (const auto& name : nodeNames) {
+            cout << setw(8) << name;
         }
         cout << endl;
 
-        for (size_t i = 0; i < steps.size(); ++i) { // 遍历每一步
-            cout << setw(8) << i+1; // 输出步骤编号
-            for (auto& node : nodes) {
-                if (steps[i][node] == INF)
-                    cout << setw(8) << "INF"; // 如果距离为无穷大，输出INF
-                else
-                    cout << setw(8) << steps[i][node]; // 输出距离
+        for (size_t i = 0; i < steps.size(); ++i) {
+            cout << setw(8) << i + 1;
+            for (const auto& name : nodeNames) {
+                float val = steps[i][name];
+                if (val == INF) cout << setw(8) << "INF";
+                else cout << setw(8) << val;
             }
             cout << endl;
         }
     }
 
-    // 打印从起点到目标节点的最短路径
-    void printPath(string destination) {
-        vector<string> path; // 存储路径
-        string current = destination;
-
-        while (predecessors.find(current) != predecessors.end()) { // 回溯路径
+    // 打印路径
+    void printPath(string dest) {
+        if (predecessors.find(dest) == predecessors.end() && dest != nodeNames[0]) {
+            cout << "No path to " << dest << endl;
+            return;
+        }
+        
+        vector<string> path;
+        string current = dest;
+        while (predecessors.count(current)) {
             path.push_back(current);
             current = predecessors[current];
         }
-        path.push_back(current); // 添加起点
+        path.push_back(current);
+        reverse(path.begin(), path.end());
 
-        reverse(path.begin(), path.end()); // 反转路径
-
-        cout << "Shortest path: ";
+        cout << "Path to " << dest << ": ";
         for (size_t i = 0; i < path.size(); ++i) {
-            if (i > 0) cout << " -> "; // 输出路径箭头
+            if (i > 0) cout << " -> ";
             cout << path[i];
         }
-        cout << "\nTotal distance: " << finalDistances[destination] << endl; // 输出总距离
+        cout << " (Distance: " << finalDistances[dest] << ")\n";
     }
-
-    // 获取节点列表（用于外部访问）
-    const vector<string>& getNodes() const { return nodes; }
 };
 
 int main() {
-    // 初始化图数据
+    // 构建无向图（确保边双向存在）
     map<string, map<string, float>> graph = {
-        {"A", {{"B", 10}, {"D", 4}}},
-        {"B", {{"A", 10}, {"C", 8}, {"D", 2}, {"E", 6}}},
-        {"C", {{"B", 8}, {"E", 1}, {"F", 5}}},
-        {"D", {{"A", 4}, {"B", 2}, {"E", 6}}},
-        {"E", {{"B", 6}, {"C", 1}, {"D", 6}, {"F", 12}}},
-        {"F", {{"C", 5}, {"E", 12}}}
+        {"A", {{"B", 5}, {"C", 21}, {"D", 9}, {"F", 36}}},
+        {"B", {{"A", 5}, {"C", 13}, {"F", 27}, {"G", 43},{"H",8}}},
+        {"C", {{"A", 21}, {"B", 13}, {"D", 7}, {"E", 17}, {"G", 14}}},
+        {"D", {{"A", 9}, {"C", 7}}},
+        {"E", {{"C", 17}, {"F", 8}, {"H", 15}}},
+        {"F", {{"A", 36}, {"B", 27},{"E", 8}, {"G", 22}}},
+        {"G", {{"B", 43}, {"C", 14}, {"F", 22}, {"H", 6}}},
+        {"H", {{"B",8},{"E", 15}, {"G", 6}}}
     };
 
-    Dijkstra d(graph); // 创建Dijkstra对象
-    string startNode = "A";
-
-    d.findShortestPath(startNode); // 计算从起点到所有节点的最短路径
+    Dijkstra d(graph);
+    d.findShortestPath("A");
     
-    cout << "Starting from node: " << startNode << endl;
-    d.printSteps(); // 打印每一步的距离更新
-
-    // 显示所有节点的最短路径
-    cout << "\nFinal Results:" << endl;
-    for (auto& node : d.getNodes()) {
-        if (node != startNode) {
-            d.printPath(node); // 打印从起点到目标节点的路径
-            cout << endl;
+    cout << "Starting from node A:\n";
+    d.printSteps();
+    
+    cout << "\nShortest Paths:\n";
+    for (const auto& node : d.nodeNames) {
+        if (node != "A") {
+            d.printPath(node);
         }
     }
 
